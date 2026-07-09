@@ -1,3 +1,19 @@
+# Block node_modules everywhere
 node_modules/
+**/node_modules/
+
+# Block environment variables and secrets everywhere
 .env
+.env.*
+**/.env
+
+# Block build output folders everywhere
 dist/
+build/
+**/dist/
+**/build/
+
+# Block OS specific files
+.DS_Store
+Thumbs.db
+
