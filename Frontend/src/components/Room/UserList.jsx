@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function UserList({ users = [],ownerId }) {
   return (
-    <div className="w-64 h-full flex flex-col bg-zinc-900 border-r border-zinc-800 p-4">
+    <div className="w-full md:w-64 max-h-40 md:max-h-none md:h-full flex flex-col bg-zinc-900 border-b md:border-b-0 md:border-r border-zinc-800 p-4">
       {/* Sidebar Header Title */}
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-xs font-mono text-zinc-400 tracking-wider uppercase">

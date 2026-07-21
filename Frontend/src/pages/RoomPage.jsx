@@ -181,12 +181,12 @@ const handleShareRoom = async () => {
 </header>
 
       {/* Primary Dashboard Core Split Layout Panel */}
-      <div className="flex-1 w-full flex overflow-hidden">
+      <div className="flex-1 w-full flex flex-col md:flex-row overflow-hidden">
         {/* Left Side: Real-Time Presence Registries */}
         <UserList users={activeUsers}  ownerId={ownerId} />
 
         {/* Right Side: Double Staged Code Stack Panel (Editor + Console) */}
-        <div className="flex-1 h-full flex flex-col bg-zinc-950 p-4 gap-4 overflow-hidden">
+        <div className="flex-1 flex flex-col bg-zinc-950 p-4 gap-4 overflow-hidden">
           {/* Top Stage: Editor Box Panel */}
           <div className="flex-1 w-full min-h-0">
             <CodeEditor 
