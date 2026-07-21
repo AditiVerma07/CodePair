@@ -70,6 +70,51 @@ exports.getRoomDetails = async (req, res) => {
   }
 };
 
+// Fetches all coding rooms owned by the authenticated user
+exports.getMyRooms = async (req, res) => {
+  try {
+    const ownerId = req.user.userId;
+    const rooms = await Room.find({ ownerId }).sort({ updatedAt: -1 });
+
+    return res.status(200).json({
+      rooms: rooms.map(r => ({
+        roomId: r.roomId,
+        language: r.language,
+        updatedAt: r.updatedAt,
+        createdAt: r.createdAt
+      }))
+    });
+  } catch (error) {
+    return res.status(500).json({ message: 'Failed to fetch your rooms', error: error.message });
+  }
+};
+
+// Deletes a coding room if the authenticated user is the owner
+exports.deleteRoom = async (req, res) => {
+  try {
+    const { roomId } = req.params;
+    const ownerId = req.user.userId;
+
+    const room = await Room.findOne({ roomId });
+
+    if (!room) {
+      return res.status(404).json({ message: 'Room not found' });
+    }
+
+    // Only the owner can delete their own room
+    if (room.ownerId.toString() !== ownerId) {
+      return res.status(403).json({ message: 'You are not authorized to delete this room' });
+    }
+
+    await Room.deleteOne({ roomId });
+
+    return res.status(200).json({ message: 'Room deleted successfully' });
+
+  } catch (error) {
+    return res.status(500).json({ message: 'Failed to delete room', error: error.message });
+  }
+};
+
 /**
  * Forwards user workspace code to the JDoodle compiler API
  */

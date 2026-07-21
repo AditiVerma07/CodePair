@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import Navbar from '../components/common/Navbar';
 import { useAuth } from '../context/AuthContext';
+import MyRooms from '../components/common/MyRooms';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -10,7 +11,6 @@ export default function Home() {
   const [targetRoomId, setTargetRoomId] = useState('');
   const [isCreating, setIsCreating] = useState(false);
 
-  // Action: Hits backend to generate a brand new unique Room document
   const handleCreateWorkspace = async () => {
     setIsCreating(true);
     try {
@@ -23,7 +23,6 @@ export default function Home() {
     }
   };
 
-  // Action: Dispatches user directly to a pre-existing route channel
   const handleJoinWorkspace = (e) => {
     e.preventDefault();
     if (!targetRoomId.trim()) return;
@@ -38,7 +37,9 @@ export default function Home() {
   return (
     <>
       <Navbar userName={user?.name} />
-      <div className="w-screen h-screen bg-zinc-950 flex flex-col items-center justify-center font-sans p-4 pt-14">
+      <div className="w-screen min-h-screen bg-zinc-950 flex flex-col items-center font-sans p-4 pt-20 pb-10 gap-6">
+
+        {/* Create / Join Card (unchanged) */}
         <div className="w-full max-w-md bg-zinc-900 border border-zinc-800/80 rounded-2xl p-8 shadow-2xl space-y-8">
 
           <div className="text-center space-y-2">
@@ -92,6 +93,15 @@ export default function Home() {
           </div>
 
         </div>
+
+        {/* Previously Created Rooms Panel (new) */}
+        <div className="w-full max-w-md bg-zinc-900 border border-zinc-800/80 rounded-2xl p-6 shadow-2xl">
+          <h3 className="text-xs font-mono text-zinc-400 uppercase tracking-wider mb-4">
+            Your Previous Rooms
+          </h3>
+          <MyRooms />
+        </div>
+
       </div>
     </>
   );

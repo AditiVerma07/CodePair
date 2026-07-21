@@ -72,6 +72,22 @@ module.exports = (io) => {
       if (affectedRoomId) {
         io.to(affectedRoomId).emit('presence-updated', remainingUsers);
         console.log(`🔌 Connection removed from room ${affectedRoomId} for client: ${socket.id}`);
+
+      // If the room is now empty, flush the final code snapshot to the database  
+      if (remainingUsers.length === 0 && codeBufferCache[affectedRoomId]) {
+      const finalSnapshot = codeBufferCache[affectedRoomId];
+      Room.findOneAndUpdate({ roomId: affectedRoomId }, { code: finalSnapshot })
+        .then(() => {
+          delete codeBufferCache[affectedRoomId];
+          console.log(`Flushed final code snapshot for empty room: ${affectedRoomId}`);
+        })
+        .catch((err) => {
+          console.error(`Final flush failed for room ${affectedRoomId}: ${err.message}`);
+        });
+    }
+  
+
+        
       }
     });
   });
